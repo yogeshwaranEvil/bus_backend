@@ -1,7 +1,5 @@
 const Booking = require('../models/Booking');
 const Bus = require('../models/Bus');
-
-// 🚌 User: Book a bus
 exports.bookBus = async (req, res) => {
   try {
     const { busId, seatNumber } = req.body;
@@ -18,13 +16,14 @@ exports.bookBus = async (req, res) => {
 
     // ✅ Book the seat
     bus.bookedSeats.push(seatNumber);
+    bus.availableSeats -= 1; // Decrease available seats
     await bus.save();
 
     // 📝 Create booking record
     const booking = await Booking.create({
-      userId,
-      busId,
-      seatNumber,
+      user: userId,
+      bus: busId,
+      seatsBooked: 1, // Assuming one seat per booking
       bookingDate: new Date()
     });
 
@@ -33,6 +32,7 @@ exports.bookBus = async (req, res) => {
     res.status(500).json({ message: 'Booking failed.', error: error.message });
   }
 };
+
 
 // ❌ User: Cancel a booking
 exports.cancelBooking = async (req, res) => {

@@ -13,7 +13,7 @@ const {
 const router = express.Router();
 
 // User routes
-router.post('/book', authenticateToken, authorizeRoles('user '), bookBus);
+router.post('/book', authenticateToken, authorizeRoles('user'), bookBus);
 router.delete('/cancel/:bookingId', authenticateToken, authorizeRoles('user'), cancelBooking);
 router.get('/my-bookings', authenticateToken, authorizeRoles('user'), getUserBookings);
 
